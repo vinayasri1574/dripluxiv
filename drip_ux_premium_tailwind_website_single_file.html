@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DripUx — Premium IV Therapy</title>
+  <meta name="description" content="DripUx — premium, clinical and trustworthy IV hydration at home. High‑contrast, modern UI with subtle motion." />
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Tailwind config tweaks */
+    :root{
+      --brand-deep:#0a2a66; /* royal deep blue */ /* hydration blue */
+      --brand-mid:#3b6fcf;  /* royal mid blue */  /* aqua */
+      --brand-soft:#e9eef2; /* sterile silver */
+      --accent:#8aa8ff;    /* soft luxury blue accent */    /* subtle luxury accent */
+    }
+
+    /* Custom utilities for nicer shadows and glass look */
+    .glass { background: rgba(255,255,255,0.6); backdrop-filter: blur(6px); box-shadow: 0 6px 30px rgba(16,24,40,0.08); }
+    .card-hover { transition: transform .45s cubic-bezier(.2,.9,.2,1), box-shadow .35s; }
+    .card-hover:hover{ transform: translateY(-8px) scale(1.02); box-shadow: 0 18px 40px rgba(16,24,40,0.12); }
+    .fancy-underline{ background-image: linear-gradient(90deg,var(--brand-mid), rgba(74,167,218,.55)); background-size: 0% 6px; background-repeat:no-repeat; background-position: 0 100%; transition: background-size .45s; }
+    .fancy-underline:hover{ background-size: 100% 6px; }
+
+    /* subtle floating animation */
+    @keyframes floaty{ 0% { transform: translateY(0);} 50% { transform: translateY(-6px);} 100%{ transform: translateY(0);} }
+    .floaty{ animation: floaty 6s ease-in-out infinite; }
+
+    /* header shadow on scroll */
+    .scrolled{ box-shadow: 0 8px 30px rgba(16,24,40,.08); backdrop-filter: blur(6px); }
+
+    /* for smaller preview devices */
+    @media (max-width:640px){ .desktop-only{ display:none } }
+    /* Gradient border utility */
+    .gradient-border{ position:relative; }
+    .gradient-border::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      padding:2px;
+      border-radius:inherit;
+      background:linear-gradient(135deg,var(--brand-mid),var(--accent),var(--brand-deep));
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;
+              mask-composite:exclude;
+      pointer-events:none;
+    }
+
+    /* Luxury micro-animations */
+    @keyframes softPulse{0%{opacity:1;}50%{opacity:.6;}100%{opacity:1;}}
+    .soft-pulse{animation:softPulse 4s ease-in-out infinite;}
+
+    @keyframes tiltHover{0%{transform:rotate(0);}50%{transform:rotate(1deg);}100%{transform:rotate(0);}}
+    .tilt-hover:hover{animation:tiltHover .6s ease-in-out;}
+</style>
+</head>
+<body class="antialiased text-slate-800 bg-[color:var(--brand-soft)]/40">
+
+  <!-- Header -->
+  <header id="topbar" class="fixed w-full z-40 top-0 left-0 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-md flex items-center justify-center bg-gradient-to-br from-[color:var(--brand-mid)] to-[color:var(--brand-deep)] text-white font-bold">DU</div>
+        <div class="hidden sm:block">
+          <span class="block font-semibold">DripUx</span>
+          <span class="text-xs text-slate-500">Clinical • Luxurious • Trustworthy</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-700">
+        <a href="#services" class="hover:text-[color:var(--brand-deep)] transition">Services</a>
+        <a href="#how" class="hover:text-[color:var(--brand-deep)] transition">How it works</a>
+        <a href="#testimonials" class="hover:text-[color:var(--brand-deep)] transition">Testimonials</a>
+        <a href="#pricing" class="hover:text-[color:var(--brand-deep)] transition">Pricing</a>
+        <a href="#contact" class="px-4 py-2 rounded-md bg-gradient-to-r from-[color:var(--brand-mid)] to-[color:var(--brand-deep)] text-white shadow-md hover:brightness-95 transition">Book a Visit</a>
+      </nav>
+
+      <div class="md:hidden">
+        <button id="menuBtn" class="p-2 rounded-md bg-[color:var(--brand-soft)] shadow-sm">
+          <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[color:var(--brand-deep)]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="md:hidden hidden px-6 pb-6">
+      <div class="flex flex-col gap-3 text-slate-700 bg-[color:var(--brand-soft)] glass p-4 rounded-md">
+        <a href="#services">Services</a>
+        <a href="#how">How it works</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact" class="mt-2 inline-block px-4 py-2 rounded-md bg-[color:var(--brand-mid)] text-white">Book a Visit</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main class="pt-28">
+
+  <!-- Parallax Hero Background -->
+  <div class="relative bg-[url('https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center bg-fixed"><div class="absolute inset-0 bg-black\/50"></div><div class="relative"('https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=1950&q=80')] bg-cover bg-center bg-fixed">
+    <section class="max-w-7xl text-white drop-shadow-lg mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-20">
+      <div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight text-[color:var(--brand-deep)]">Clinical hydration, delivered luxuriously.</h1>
+        <p class="mt-6 text-slate-600 max-w-xl">DripUx blends medical-grade IV therapy with spa-level comfort. On-demand clinician visits, custom nutrient cocktails and a discreet premium experience.</p>
+
+        <div class="mt-8 flex gap-4 items-center">
+          <a href="#contact" class="inline-flex items-center gap-3 px-6 py-3 rounded-lg bg-gradient-to-r from-[color:var(--brand-mid)] to-[color:var(--brand-deep)] text-white font-semibold shadow-lg hover:scale-[1.02] transition">Book Now</a>
+          <a href="#how" class="flex items-center gap-2 text-[color:var(--brand-deep)] fancy-underline">How it works</a>
+        </div>
+
+        <div class="mt-10 grid grid-cols-3 gap-4 text-sm">
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-[color:var(--brand-soft)] flex items-center justify-center">✓</div>
+            <div>
+              <div class="text-sm font-medium text-slate-700">Clinician-led</div>
+              <div class="text-xs text-slate-500">Registered nurses & physicians</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-[color:var(--brand-soft)] flex items-center justify-center">⚕</div>
+            <div>
+              <div class="text-sm font-medium text-slate-700">Medical-grade</div>
+              <div class="text-xs text-slate-500">Sterile & tested formulations</div>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-[color:var(--brand-soft)] flex items-center justify-center">⭐</div>
+            <div>
+              <div class="text-sm font-medium text-slate-700">Premium service</div>
+              <div class="text-xs text-slate-500">Discreet, comfortable visits</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual card -->
+      <div class="relative">
+        <div class="absolute -left-8 -top-8 w-56 h-56 rounded-2xl bg-[color:var(--brand-mid)]/10 blur-3xl opacity-70"></div>
+        <div class="absolute -right-8 bottom-6 w-40 h-64 rounded-2xl bg-[color:var(--brand-deep)]/8 blur-3xl"></div>
+
+        <div class="glass p-6 rounded-2xl card-hover">
+          <img src="/mnt/data/98f87b31-14fe-4e33-a119-28818959d16c.jpeg" alt="hydration" class="w-full rounded-lg object-cover max-h-96 floaty" />
+
+          <div class="mt-4 grid grid-cols-2 gap-4">
+            <div class="p-4 rounded-lg bg-[color:var(--brand-soft)]/60">
+              <div class="text-xs text-slate-500">Signature drip</div>
+              <div class="font-semibold text-slate-800">Hydra + Glow</div>
+            </div>
+            <div class="p-4 rounded-lg bg-[color:var(--brand-soft)]/60">
+              <div class="text-xs text-slate-500">Avg. session</div>
+              <div class="font-semibold text-slate-800">45–60 mins</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section></div></div>
+
+    <!-- Services -->
+    <section id="services" class="max-w-7xl mx-auto px-6 py-12">
+      <h2 class="text-2xl font-bold text-[color:var(--brand-deep)]">Our services</h2>
+      <p class="text-slate-600 mt-2 max-w-2xl">From immune-boosting drips to athletic recovery — clinically-designed blends, administered at your home.</p>
+
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <article class="p-6 rounded-2xl bg-[color:var(--brand-soft)] glass card-hover">
+          <div class="flex items-center justify-between">
+            <div class="text-lg font-semibold">Hydra + Glow</div>
+            <div class="text-sm text-slate-500">Best-seller</div>
+          </div>
+          <p class="mt-3 text-slate-600">Skin-hydrating vitamins, antioxidants and glutathione for a luminous glow.</p>
+          <div class="mt-4 flex items-center justify-between">
+            <div class="text-sm font-medium text-[color:var(--brand-deep)]">₹3,499</div>
+            <a class="text-sm italic text-slate-700 hover:text-[color:var(--brand-deep)]" href="#contact">Book</a>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="p-6 rounded-2xl bg-[color:var(--brand-soft)] glass card-hover">
+          <div class="flex items-center justify-between">
+            <div class="text-lg font-semibold">Immunity Boost</div>
+            <div class="text-sm text-slate-500">Clinician formula</div>
+          </div>
+          <p class="mt-3 text-slate-600">Hydration, vitamin C and zinc to support immune response.</p>
+          <div class="mt-4 flex items-center justify-between">
+            <div class="text-sm font-medium text-[color:var(--brand-deep)]">₹3,999</div>
+            <a class="text-sm italic text-slate-700 hover:text-[color:var(--brand-deep)]" href="#contact">Book</a>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="p-6 rounded-2xl bg-[color:var(--brand-soft)] glass card-hover">
+          <div class="flex items-center justify-between">
+            <div class="text-lg font-semibold">Recovery + Performance</div>
+            <div class="text-sm text-slate-500">Athlete</div>
+          </div>
+          <p class="mt-3 text-slate-600">Electrolyte balance with amino acids for fast recovery.</p>
+          <div class="mt-4 flex items-center justify-between">
+            <div class="text-sm font-medium text-[color:var(--brand-deep)]">₹4,499</div>
+            <a class="text-sm italic text-slate-700 hover:text-[color:var(--brand-deep)]" href="#contact">Book</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="bg-[color:var(--brand-soft)]/60 py-12">
+      <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="md:col-span-2">
+          <h3 class="text-2xl font-bold text-[color:var(--brand-deep)]">How it works</h3>
+          <p class="text-slate-600 mt-2">Simple, safe and clinician-led.</p>
+
+          <ol class="mt-6 space-y-6">
+            <li class="flex gap-4 items-start">
+              <div class="w-12 h-12 rounded-xl bg-[color:var(--brand-mid)]/10 flex items-center justify-center text-[color:var(--brand-deep)] font-semibold">1</div>
+              <div>
+                <div class="font-semibold">Book an appointment</div>
+                <div class="text-sm text-slate-600">Choose a drip, date and time. Our clinician confirms eligibility.</div>
+              </div>
+            </li>
+
+            <li class="flex gap-4 items-start">
+              <div class="w-12 h-12 rounded-xl bg-[color:var(--brand-mid)]/10 flex items-center justify-center text-[color:var(--brand-deep)] font-semibold">2</div>
+              <div>
+                <div class="font-semibold">Clinician visit</div>
+                <div class="text-sm text-slate-600">Registered nurse arrives with sterile setup and explains the treatment.</div>
+              </div>
+            </li>
+
+            <li class="flex gap-4 items-start">
+              <div class="w-12 h-12 rounded-xl bg-[color:var(--brand-mid)]/10 flex items-center justify-center text-[color:var(--brand-deep)] font-semibold">3</div>
+              <div>
+                <div class="font-semibold">Relax & recover</div>
+                <div class="text-sm text-slate-600">Enjoy a comfortable session with monitoring and aftercare instructions.</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="p-6 rounded-2xl glass card-hover">
+          <img src="/mnt/data/37e6a35e-1361-4b88-a341-da4c106bca61.jpeg" alt="clinical" class="rounded-lg object-cover w-full max-h-80" />
+          <div class="mt-4">
+            <div class="text-sm text-slate-500">Featured</div>
+            <div class="text-lg font-semibold">Clinically vetted protocols</div>
+            <div class="mt-2 text-slate-600 text-sm">Formulations created in partnership with physicians and nutritionists.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="max-w-7xl mx-auto px-6 py-12">
+      <h2 class="text-2xl font-bold text-[color:var(--brand-deep)]">What our clients say</h2>
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <blockquote class="p-6 rounded-2xl glass">
+          <p class="text-slate-700">"Fast recovery after my marathon — felt light and energized."</p>
+          <footer class="mt-4 text-sm text-slate-500">— R. Sharma</footer>
+        </blockquote>
+
+        <blockquote class="p-6 rounded-2xl glass">
+          <p class="text-slate-700">"Professional, discreet team. The nurse explained everything carefully."</p>
+          <footer class="mt-4 text-sm text-slate-500">— N. Kapoor</footer>
+        </blockquote>
+
+        <blockquote class="p-6 rounded-2xl glass">
+          <p class="text-slate-700">"The Hydra + Glow drip gave me an instant glow for my event."</p>
+          <footer class="mt-4 text-sm text-slate-500">— A. Mehta</footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="bg-[color:var(--brand-soft)]/80 py-12">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-2xl font-bold text-[color:var(--brand-deep)]">Simple pricing</h2>
+        <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl glass card-hover text-center">
+            <div class="text-sm text-slate-500">Starter</div>
+            <div class="text-2xl font-semibold mt-3">₹2,499</div>
+            <div class="mt-3 text-sm text-slate-600">Basic hydration</div>
+            <button class="mt-6 px-4 py-2 rounded-md bg-[color:var(--brand-soft)] text-[color:var(--brand-deep)] border border-[color:var(--brand-deep)]">Book</button>
+          </div>
+
+          <div class="p-6 rounded-2xl glass card-hover text-center border-2 border-[color:var(--brand-mid)] scale-[1.02]">
+            <div class="text-sm text-slate-500">Popular</div>
+            <div class="text-2xl font-semibold mt-3">₹3,499</div>
+            <div class="mt-3 text-sm text-slate-600">Hydra + Glow</div>
+            <button class="mt-6 px-4 py-2 rounded-md bg-gradient-to-r from-[color:var(--brand-mid)] to-[color:var(--brand-deep)] text-white">Book</button>
+          </div>
+
+          <div class="p-6 rounded-2xl glass card-hover text-center">
+            <div class="text-sm text-slate-500">Pro</div>
+            <div class="text-2xl font-semibold mt-3">₹4,499</div>
+            <div class="mt-3 text-sm text-slate-600">Recovery + Performance</div>
+            <button class="mt-6 px-4 py-2 rounded-md bg-[color:var(--brand-soft)] text-[color:var(--brand-deep)] border border-[color:var(--brand-deep)]">Book</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact / CTA -->
+    <section id="contact" class="max-w-4xl mx-auto px-6 py-12">
+      <div class="p-8 rounded-2xl glass grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <div>
+          <h3 class="text-xl font-bold">Ready to feel better?</h3>
+          <p class="text-slate-600 mt-2">Book a visit and a clinician will reach out to confirm details and eligibility.</p>
+
+          <dl class="mt-6 text-sm text-slate-700 space-y-3">
+            <div>📞 <strong>Call</strong> — +91 98765 43210</div>
+            <div>📧 <strong>Email</strong> — hello@dripux.example</div>
+            <div>🕒 <strong>Hours</strong> — Mon–Sun, 8am–8pm</div>
+          </dl>
+        </div>
+
+        <form class="space-y-4" onsubmit="event.preventDefault(); alert('Thanks — we\'ll contact you!')">
+          <div>
+            <label class="block text-sm text-slate-600">Name</label>
+            <input required class="mt-2 w-full rounded-md p-3 border border-slate-200" placeholder="Your full name" />
+          </div>
+          <div>
+            <label class="block text-sm text-slate-600">Phone</label>
+            <input required class="mt-2 w-full rounded-md p-3 border border-slate-200" placeholder="Mobile number" />
+          </div>
+          <div>
+            <label class="block text-sm text-slate-600">Service</label>
+            <select class="mt-2 w-full rounded-md p-3 border border-slate-200">
+              <option>Hydra + Glow</option>
+              <option>Immunity Boost</option>
+              <option>Recovery + Performance</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="px-5 py-3 rounded-lg bg-[color:var(--brand-mid)] text-white font-semibold">Request Booking</button>
+            <button type="button" class="px-4 py-3 rounded-lg bg-[color:var(--brand-soft)] border">Call Now</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-12 border-t border-slate-100 bg-[color:var(--brand-soft)]/80">
+    <div class="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-start justify-between gap-6">
+      <div>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-md bg-gradient-to-br from-[color:var(--brand-mid)] to-[color:var(--brand-deep)] text-white flex items-center justify-center">DU</div>
+          <div>
+            <div class="font-semibold">DripUx</div>
+            <div class="text-sm text-slate-500">Clinically supervised IV therapy</div>
+          </div>
+        </div>
+        <div class="mt-6 text-sm text-slate-600">© <span id="year"></span> DripUx — All rights reserved.</div>
+      </div>
+
+      <div class="flex gap-10">
+        <div>
+          <div class="font-semibold text-sm">Company</div>
+          <ul class="mt-3 text-sm text-slate-600 space-y-2">
+            <li><a href="#how" class="hover:text-[color:var(--brand-deep)]">About</a></li>
+            <li><a href="#testimonials" class="hover:text-[color:var(--brand-deep)]">Careers</a></li>
+            <li><a href="#pricing" class="hover:text-[color:var(--brand-deep)]">Press</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="font-semibold text-sm">Support</div>
+          <ul class="mt-3 text-sm text-slate-600 space-y-2">
+            <li><a href="#contact" class="hover:text-[color:var(--brand-deep)]">Help</a></li>
+            <li><a href="#contact" class="hover:text-[color:var(--brand-deep)]">Safety</a></li>
+            <li><a href="#contact" class="hover:text-[color:var(--brand-deep)]">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // small header scroll effect
+    const topbar = document.getElementById('topbar');
+    window.addEventListener('scroll', () => {
+      if(window.scrollY > 10) topbar.classList.add('scrolled'); else topbar.classList.remove('scrolled');
+    });
+
+    // mobile menu
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+
+    // year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // simple reveal on scroll
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting) e.target.classList.add('opacity-100','translate-y-0');
+      });
+    }, {threshold:.15});
+    document.querySelectorAll('section, article, .card-hover').forEach(el=>{
+      el.classList.add('opacity-0','-translate-y-6','transition-all','duration-700');
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
